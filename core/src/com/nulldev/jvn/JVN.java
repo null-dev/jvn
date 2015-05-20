@@ -42,7 +42,10 @@ public class JVN extends ApplicationAdapter {
 		//Not localized at this point
 		creationLogger.info("Initializing JVN...");
 		//Localize the program...
-		JVNLocale.loadLocale(JVNConfig.readString("locale"));
+		if(!JVNLocale.loadLocale(JVNConfig.readString("locale"))) {
+			creationLogger.severe("Failed to initialize localizations! Aborting...");
+			System.exit(-1);
+		}
 		//Create state logger
 		stateLogger = new JVNLogger("StateLogger");
 		//Print device info...
