@@ -102,6 +102,6 @@ public class JVNLocale {
 	
 	//Used for getting the actual string from the locale
 	public static String s(String text) {
-		return messageList.get(message);
+		return messageList.get(text);
 	}
 }
