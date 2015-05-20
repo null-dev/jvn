@@ -1,0 +1,11 @@
+//This is an example locale file for the English language
+
+//Debug localizations...
+debugOn: Debug console enabled!
+debugOff: Debug console disabled!
+debugConsoleIssueCommand: Debug console issued command: %s!
+
+//StateLogger localizations...
+stateLoggerPaused: JVN paused!
+stateLoggerResumed: JVN resumed!
+stateLoggerResized: JVN window resized to: %s, %s!
