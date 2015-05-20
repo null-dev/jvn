@@ -67,7 +67,7 @@ public class JVN extends ApplicationAdapter {
 		batch.end();
 		
 		//Debug stuff
-		//ALWAYS PUT THIS LAST!
+		//ALWAYS PUT THIS LAST! (So it can be ontop of everything)
 		DebugUI.debugLoop(camera);
 	}
 	

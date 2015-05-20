@@ -13,6 +13,7 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		//Pass launcher params
 		initialize(new JVN(new HashMap<String, Object>()), config);
 	}
 }

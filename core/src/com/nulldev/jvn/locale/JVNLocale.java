@@ -10,6 +10,11 @@ import java.util.HashMap;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.debug.JVNLogger;
 
+/*
+ * JVNLocale allows JVN and JVN novels to be easily translated into other languages with little or no modification of the original code!
+ * An example translation is specified in the locale folder.
+ */
+
 public class JVNLocale {
 	public static String currentLocale;
 	public static HashMap<String, String> messageList = new HashMap<String, String>();
@@ -95,8 +100,8 @@ public class JVNLocale {
 		return true;
 	}
 	
-	//Used for getting the actual message from the locale
-	public static String s(String message) {
+	//Used for getting the actual string from the locale
+	public static String s(String text) {
 		return messageList.get(message);
 	}
 }
