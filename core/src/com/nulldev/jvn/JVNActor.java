@@ -15,7 +15,7 @@ public class JVNActor {
 	//Opacity 0-1
 	float opacity = 1f;
 	
-	//Empty contructor
+	//Empty constructor
 	public JVNActor() {
 	}
 	
@@ -37,5 +37,42 @@ public class JVNActor {
 	//Render
 	public void render(SpriteBatch batch) {
 		
+	}
+	
+	//Getters and setters
+	public JVNCoordinate getCoordinates() {
+		return this.loc;
+	}
+	
+	public JVNActor setCoordinates(JVNCoordinate coord) {
+		this.loc = coord;
+		return this;
+	}
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public JVNActor setRotation(float rotation) {
+		this.rotation = rotation;
+		return this;
+	}
+
+	public float getScale() {
+		return scale;
+	}
+
+	public JVNActor setScale(float scale) {
+		this.scale = scale;
+		return this;
+	}
+
+	public float getOpacity() {
+		return opacity;
+	}
+
+	public JVNActor setOpacity(float opacity) {
+		this.opacity = opacity;
+		return this;
 	}
 }
