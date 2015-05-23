@@ -1,9 +1,9 @@
-package com.nulldev.jvn;
+package com.nulldev.jvn.graphics;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 //Basic actor class, can specify position, rotation, scale and opacity
-public class JVNActor {
+public abstract class JVNActor {
 	Keyframer keyframer;
 	
 	//Coordinates
@@ -14,10 +14,6 @@ public class JVNActor {
 	float scale = 1f;
 	//Opacity 0-1
 	float opacity = 1f;
-	
-	//Empty constructor
-	public JVNActor() {
-	}
 	
 	//Set a keyframer
 	public JVNActor addKeyframer(Keyframer keyframer) {
@@ -34,10 +30,8 @@ public class JVNActor {
 		}
 	}
 	
-	//Render
-	public void render(SpriteBatch batch) {
-		
-	}
+	//Render the actor, JVNActor has nothing to render so this is not needed!
+	abstract public void render(SpriteBatch batch);
 	
 	//Getters and setters
 	public JVNCoordinate getCoordinates() {

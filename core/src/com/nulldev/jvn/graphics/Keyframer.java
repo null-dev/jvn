@@ -1,4 +1,4 @@
-package com.nulldev.jvn;
+package com.nulldev.jvn.graphics;
 
 //Basic keyframer class
 public class Keyframer {

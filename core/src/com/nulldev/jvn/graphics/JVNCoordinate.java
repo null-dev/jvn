@@ -1,4 +1,4 @@
-package com.nulldev.jvn;
+package com.nulldev.jvn.graphics;
 
 /*
  * Basic coordinate class to make my life easier

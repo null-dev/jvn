@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nulldev.jvn.debug.DebugUI;
 import com.nulldev.jvn.debug.JVNLogger;
+import com.nulldev.jvn.graphics.JVNActor;
 import com.nulldev.jvn.locale.JVNLocale;
 
 /*

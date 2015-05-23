@@ -1,5 +1,7 @@
 package com.nulldev.jvn;
 
+import com.nulldev.jvn.graphics.JVNActor;
+
 //Take care of ticking all the objects in the map
 public class TickManager {
 	static long lastTick = 0;
