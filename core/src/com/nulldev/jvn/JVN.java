@@ -1,5 +1,6 @@
 package com.nulldev.jvn;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -27,6 +28,9 @@ public class JVN extends ApplicationAdapter {
 	OrthographicCamera camera;
 	HashMap<String, Object> launcherParams;
 	JVNLogger stateLogger;
+	static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
+	
+	JVNNative nativeCode;
 	
 	//Launcher can pass parameters
 	public JVN(HashMap<String, Object> launcherParams) {
@@ -65,6 +69,8 @@ public class JVN extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
+		
+		TickManager.tick();
 		
 		//Debug stuff
 		//ALWAYS PUT THIS LAST!

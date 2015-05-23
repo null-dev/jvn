@@ -4,6 +4,8 @@
 debugOn: Debug console enabled!
 debugOff: Debug console disabled!
 debugConsoleIssueCommand: Debug console issued command: %s!
+debugConsoleUnknownCommand: Unknown command!
+getTpsResult: TPS is: 
 
 //StateLogger localizations...
 stateLoggerPaused: JVN paused!

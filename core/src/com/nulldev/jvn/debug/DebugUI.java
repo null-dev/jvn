@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.nulldev.jvn.JVNConfig;
+import com.nulldev.jvn.TickManager;
 import com.nulldev.jvn.locale.JVNLocale;
 
 public class DebugUI {
@@ -44,13 +45,27 @@ public class DebugUI {
 					if(typedCharacters.size() != 0) {
 						String command = getStringRepresentation(typedCharacters);
 						typedCharacters.clear();
-						logger.info(String.format(JVNLocale.s("debugConsoleIssueCommand"), command));
+						//No longer needed
+						//logger.info(String.format(JVNLocale.s("debugConsoleIssueCommand"), command));
+						executeDebugCommand(command);
 					}
 				}
 			}
 		}
 	}
-
+	
+	//Execute debug commands
+	public static void executeDebugCommand(String command) {
+		String[] splitCommands = command.split(" ");
+		//Get the TPS (FPS)
+		if(splitCommands[0].equalsIgnoreCase("GETTPS")) {
+			logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
+		} else {
+			//Wut command is that?
+			logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
+		}
+	}
+	
 	//Check the keybinds
 	public static void checkKeyBinds() {
 		//Debug console
