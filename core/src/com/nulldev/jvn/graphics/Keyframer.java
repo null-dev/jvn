@@ -37,7 +37,7 @@ public class Keyframer {
 				-assignedActor.getCoordinates().getX())/ms;
 		this.coordIncrementRateY = (nextCoord.getY()
 				-assignedActor.getCoordinates().getY())/ms;
-		this.coordLastTickMs = 0;
+		this.coordLastTickMs = System.currentTimeMillis();
 		this.coordFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
@@ -46,7 +46,7 @@ public class Keyframer {
 	public Keyframer keyframeRotation(float nextAngle, long ms) {
 		this.rotationIncrementRate = (nextAngle
 				-assignedActor.getRotation())/ms;
-		this.rotationLastTickMs = 0;
+		this.rotationLastTickMs = System.currentTimeMillis();
 		this.rotationFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
@@ -55,7 +55,7 @@ public class Keyframer {
 	public Keyframer keyframeScale(float nextScale, long ms) {
 		this.scaleIncrementRate = (nextScale
 				-assignedActor.getScale())/ms;
-		this.scaleLastTickMs = 0;
+		this.scaleLastTickMs = System.currentTimeMillis();
 		this.scaleFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
@@ -64,7 +64,7 @@ public class Keyframer {
 	public Keyframer keyframeOpacity(float nextOpacity, long ms) {
 		this.opacityIncrementRate = (nextOpacity
 				-assignedActor.getOpacity())/ms;
-		this.opacityLastTickMs = 0;
+		this.opacityLastTickMs = System.currentTimeMillis();
 		this.opacityFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
@@ -101,6 +101,7 @@ public class Keyframer {
 			coordFinishMs = 0;
 		} else {
 			long toIncrement = curMs - coordLastTickMs;
+			
 			//Update X
 			assignedActor.getCoordinates().setX(assignedActor.getCoordinates().getX()
 					+(coordIncrementRateX
@@ -109,6 +110,7 @@ public class Keyframer {
 			assignedActor.getCoordinates().setY(assignedActor.getCoordinates().getY()
 					+(coordIncrementRateY
 							*toIncrement));
+			
 			//Update last tick
 			coordLastTickMs = curMs;
 		}

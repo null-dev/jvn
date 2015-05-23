@@ -1,5 +1,6 @@
 package com.nulldev.jvn;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nulldev.jvn.graphics.JVNActor;
 
 //Take care of ticking all the objects in the map
@@ -22,5 +23,12 @@ public class TickManager {
 			tps = 0;
 		}
 		lastTick = System.currentTimeMillis();
+	}
+	
+	//Render everything, execute every frame
+	public static void render(SpriteBatch batch) {
+		for(JVNActor actorToRender : JVN.actorList) {
+			actorToRender.render(batch);
+		}
 	}
 }

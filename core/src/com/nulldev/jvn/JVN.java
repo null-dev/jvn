@@ -11,7 +11,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nulldev.jvn.debug.DebugUI;
 import com.nulldev.jvn.debug.JVNLogger;
+import com.nulldev.jvn.graphics.DrawableActor;
 import com.nulldev.jvn.graphics.JVNActor;
+import com.nulldev.jvn.graphics.JVNCoordinate;
+import com.nulldev.jvn.graphics.Keyframer;
 import com.nulldev.jvn.locale.JVNLocale;
 
 /*
@@ -60,6 +63,16 @@ public class JVN extends ApplicationAdapter {
 				, Gdx.graphics.getHeight());
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		
+		//Add test drawable actor
+		DrawableActor tempActor = new DrawableActor(img);
+		Keyframer tempKeyframer = new Keyframer();
+		tempActor.addKeyframer(tempKeyframer);
+		tempKeyframer.keyframeCoordinate(new JVNCoordinate(500,500), 2000);
+		tempKeyframer.keyframeOpacity(0f, 2000);
+		tempKeyframer.keyframeRotation(90, 2000);
+		tempKeyframer.keyframeScale(5, 2000);
+		actorList.add(tempActor);
 	}
 
 	@Override
@@ -69,13 +82,11 @@ public class JVN extends ApplicationAdapter {
 		//Configure graphics
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
 		
 		//Tick everything
 		TickManager.tick();
+		//Render everything
+		TickManager.render(batch);
 		
 		//Debug stuff
 		//ALWAYS PUT THIS LAST! (So it can be ontop of everything)
