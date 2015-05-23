@@ -1,5 +1,6 @@
 package com.nulldev.jvn;
 
+//Basic keyframer class
 public class Keyframer {
 	JVNActor assignedActor;
 	

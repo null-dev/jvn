@@ -73,6 +73,7 @@ public class JVN extends ApplicationAdapter {
 		batch.draw(img, 0, 0);
 		batch.end();
 		
+		//Tick everything
 		TickManager.tick();
 		
 		//Debug stuff

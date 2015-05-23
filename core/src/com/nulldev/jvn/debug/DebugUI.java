@@ -17,7 +17,6 @@ import com.nulldev.jvn.locale.JVNLocale;
 
 /*
  * Simple debug console that can be pulled up by tapping the "MENU" button on Android or holding "CTRL+GRAVE" on PC
- * No commands have be specified yet.
  */
 
 public class DebugUI {
