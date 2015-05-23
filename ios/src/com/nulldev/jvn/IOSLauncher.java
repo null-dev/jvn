@@ -13,6 +13,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        //Pass launcher params
         return new IOSApplication(new JVN(new HashMap<String, Object>()), config);
     }
 

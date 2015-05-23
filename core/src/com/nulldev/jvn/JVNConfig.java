@@ -2,6 +2,10 @@ package com.nulldev.jvn;
 
 import java.util.HashMap;
 
+/*
+ * Allows easy configuration of specific components of JVN
+ */
+
 public class JVNConfig {
 	private final static HashMap<String, Object> config =
 			new HashMap<String, Object>();

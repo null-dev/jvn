@@ -15,6 +15,11 @@ import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.TickManager;
 import com.nulldev.jvn.locale.JVNLocale;
 
+/*
+ * Simple debug console that can be pulled up by tapping the "MENU" button on Android or holding "CTRL+GRAVE" on PC
+ * No commands have be specified yet.
+ */
+
 public class DebugUI {
 	private static JVNLogger logger = new JVNLogger("DebugUI");
 	static boolean debugConsoleKeysPressed = false;
@@ -69,6 +74,7 @@ public class DebugUI {
 	//Check the keybinds
 	public static void checkKeyBinds() {
 		//Debug console
+		//Can be activated by tapping the "MENU" button on Android or holding "CTRL+GRAVE" on PC
 		if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
 				|| Gdx.input.isKeyPressed(Input.Keys.MENU)){
 			if((Gdx.input.isKeyPressed(Input.Keys.GRAVE)
@@ -97,7 +103,7 @@ public class DebugUI {
 
 	//Render debug console
 	public static void renderDebugConsole(OrthographicCamera camera) {
-		//Render the text box
+		//Render input box background
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		sr.setProjectionMatrix(camera.combined);
@@ -109,7 +115,7 @@ public class DebugUI {
 		sr.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 
-		//Render the actual text
+		//Render typed text for the input box
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		debugConsoleFont.setColor(0, 0, 0, 1);
@@ -118,7 +124,7 @@ public class DebugUI {
 				camera.viewportHeight/-2+16);
 		batch.end();
 
-		//Render output
+		//Render program log
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		//White please :)
@@ -148,6 +154,8 @@ public class DebugUI {
 	}	
 
 	//Print device info
+	//Will be removed later probably
+	//TODO REMOVE
 	public static void printDeviceInfo() {
 		logger.info("Printing device info...");
 		//Screen height and width
@@ -163,6 +171,7 @@ public class DebugUI {
 	}
 
 	//Cheaty and hardcoded text input :)
+	//Catches text input for the debug console
 	public static String cheatyTextInputProbe() {
 		for(int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
 			if(Gdx.input.isKeyJustPressed(key)) {
