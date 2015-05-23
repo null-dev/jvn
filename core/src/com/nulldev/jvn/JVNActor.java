@@ -5,8 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 //Basic actor class, can specify position, rotation, scale and opacity
 public class JVNActor {
 	Keyframer keyframer;
-	float x;
-	float y;
+	
+	//Coordinates
+	JVNCoordinate loc = new JVNCoordinate();
+	//Rotation going clockwise
+	float rotation = 0f;
+	//Scale
+	float scale = 1f;
+	//Opacity 0-1
+	float opacity = 1f;
 	
 	//Empty contructor
 	public JVNActor() {
