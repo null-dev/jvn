@@ -3,27 +3,36 @@ package com.nulldev.jvn;
 //Basic keyframer class
 public class Keyframer {
 	JVNActor assignedActor;
-	
+
 	//Keyframes for coordinates
-	JVNCoordinate nextCoord = null;
 	float coordIncrementRateX = 0;
 	float coordIncrementRateY = 0;
 	long coordLastTickMs = 0;
 	long coordFinishMs = 0;
-	
+
+	//Keyframes for rotation
 	float rotationIncrementRate = 0;
 	long rotationLastTickMs = 0;
 	long rotationFinishMs = 0;
-	
+
+	//Keyframes for scale
+	float scaleIncrementRate = 0;
+	long scaleLastTickMs = 0;
+	long scaleFinishMs = 0;
+
+	//Keyframes for opacity
+	float opacityIncrementRate = 0;
+	long opacityLastTickMs = 0;
+	long opacityFinishMs = 0;
+
 	//Internal variable to set actor
 	public Keyframer setActor(JVNActor assignedActor) {
 		this.assignedActor = assignedActor;
 		return this;
 	}
-	
+
 	//Keyframe a coordinate
 	public Keyframer keyframeCoordinate(JVNCoordinate nextCoord, long ms) {
-		this.nextCoord = nextCoord;
 		this.coordIncrementRateX = (nextCoord.getX()
 				-assignedActor.getCoordinates().getX())/ms;
 		this.coordIncrementRateY = (nextCoord.getY()
@@ -32,32 +41,60 @@ public class Keyframer {
 		this.coordFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
-	
+
+	//Keyframe a rotation
 	public Keyframer keyframeRotation(float nextAngle, long ms) {
-		this.rotationIncrementRate = nextAngle/ms;
+		this.rotationIncrementRate = (nextAngle
+				-assignedActor.getRotation())/ms;
 		this.rotationLastTickMs = 0;
 		this.rotationFinishMs = System.currentTimeMillis() + ms;
 		return this;
 	}
-	
+
+	//Keyframe a scale
+	public Keyframer keyframeScale(float nextScale, long ms) {
+		this.scaleIncrementRate = (nextScale
+				-assignedActor.getScale())/ms;
+		this.scaleLastTickMs = 0;
+		this.scaleFinishMs = System.currentTimeMillis() + ms;
+		return this;
+	}
+
+	//Keyframe a opacity
+	public Keyframer keyframeOpacity(float nextOpacity, long ms) {
+		this.opacityIncrementRate = (nextOpacity
+				-assignedActor.getOpacity())/ms;
+		this.opacityLastTickMs = 0;
+		this.opacityFinishMs = System.currentTimeMillis() + ms;
+		return this;
+	}
+
 	//Tick
 	public void tick() {
 		//Tick coord
-		if(nextCoord != null) {
+		if(coordIncrementRateX != 0
+				|| coordIncrementRateY != 0) {
 			tickCoord();
 		}
 		//Tick rotation
 		if(rotationIncrementRate != 0) {
 			tickRotation();
 		}
+		//Tick scale
+		if(scaleIncrementRate != 0) {
+			tickScale();
+		}
+		//Tick opacity
+		if(opacityIncrementRate != 0) {
+			tickOpacity();
+		}
 	}
-	
+
 	//Tick coord
 	void tickCoord() {
 		long curMs = System.currentTimeMillis();
 		//Reset if we are done!
 		if(curMs > coordFinishMs) {
-			nextCoord = null;
 			coordIncrementRateX = 0;
 			coordIncrementRateY = 0;
 			coordLastTickMs = 0;
@@ -76,7 +113,7 @@ public class Keyframer {
 			coordLastTickMs = curMs;
 		}
 	}
-	
+
 	//Tick rotation
 	void tickRotation() {
 		long curMs = System.currentTimeMillis();
@@ -85,13 +122,49 @@ public class Keyframer {
 			rotationLastTickMs = 0;
 			rotationFinishMs = 0;
 		} else {
-			long toIncrement = curMs - coordLastTickMs;
+			long toIncrement = curMs - rotationLastTickMs;
 			//Update rotation
 			assignedActor.setRotation(assignedActor.getRotation()
 					+(rotationIncrementRate
 							*toIncrement));
 			//Update last tick
 			rotationLastTickMs = curMs;
+		}
+	}
+
+	//Tick scale
+	void tickScale() {
+		long curMs = System.currentTimeMillis();
+		if(curMs > scaleFinishMs) {
+			scaleIncrementRate = 0;
+			scaleLastTickMs = 0;
+			scaleFinishMs = 0;
+		} else {
+			long toIncrement = curMs - scaleLastTickMs;
+			//Update scale
+			assignedActor.setScale(assignedActor.getScale()
+					+(scaleIncrementRate
+							*toIncrement));
+			//Update last tick
+			scaleLastTickMs = curMs;
+		}
+	}
+
+	//Tick opacity
+	void tickOpacity() {
+		long curMs = System.currentTimeMillis();
+		if(curMs > opacityFinishMs) {
+			opacityIncrementRate = 0;
+			opacityLastTickMs = 0;
+			opacityFinishMs = 0;
+		} else {
+			long toIncrement = curMs - opacityLastTickMs;
+			//Update scale
+			assignedActor.setOpacity(assignedActor.getOpacity()
+					+(opacityIncrementRate
+							*toIncrement));
+			//Update last tick
+			opacityLastTickMs = curMs;
 		}
 	}
 }
