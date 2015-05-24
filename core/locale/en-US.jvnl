@@ -6,6 +6,9 @@ debugOff: Debug console disabled!
 debugConsoleIssueCommand: Debug console issued command: %s!
 debugConsoleUnknownCommand: Unknown command!
 getTpsResult: TPS is: 
+garbageCollectInfo: Starting garbage collection...
+traceInstructionsInfo: Instruction tracing turned %b!
+traceMethodCallsInfo: Method call tracing turned %b!
 
 //StateLogger localizations...
 stateLoggerPaused: JVN paused!

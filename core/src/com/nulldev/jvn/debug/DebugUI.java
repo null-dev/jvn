@@ -33,6 +33,9 @@ public class DebugUI {
 	static BitmapFont debugConsoleFont = new BitmapFont();
 	static ArrayList<Character> typedCharacters = new ArrayList<Character>();
 
+	static boolean instructionTracingActive = false;
+	static boolean methodCallTracingActive = false;
+
 	//The debug loop that should be called every render...
 	public static void debugLoop(OrthographicCamera camera) {
 		//EVERYTHING should be inside this if statement
@@ -62,13 +65,14 @@ public class DebugUI {
 			}
 		}
 	}
-	
+
 	//Execute debug commands
 	public static void executeDebugCommand(String command) {
 		String[] splitCommands = command.split(" ");
 		//Get the TPS (FPS)
 		if(splitCommands[0].equalsIgnoreCase("GETTPS")) {
 			logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
+			//Spawn an actor just for testing
 		} else if(splitCommands[0].equalsIgnoreCase("TESTACTOR")) {
 			DrawableActor tempActor = new DrawableActor(new Texture("assets/icon_white.png"));
 			tempActor.setScale(0.5f);
@@ -80,12 +84,26 @@ public class DebugUI {
 			tempKeyframer.keyframeRotation(90, 2000);
 			tempKeyframer.keyframeScale(2f, 2000);
 			JVN.actorList.put(tempActor.getZIndex(), tempActor);
+		} else if(splitCommands[0].equalsIgnoreCase("GC")) {
+			logger.info(JVNLocale.s("garbageCollectInfo"));
+			System.gc();
+			//Trace instruction calls
+		} else if(splitCommands[0].equalsIgnoreCase("TRACEINSTRUCTIONS")) {
+			instructionTracingActive = !instructionTracingActive;
+			Runtime.getRuntime().traceInstructions(instructionTracingActive);
+			logger.info(String.format(JVNLocale.s("traceInstructionsInfo"),
+					instructionTracingActive));
+		} else if(splitCommands[0].equalsIgnoreCase("TRACEMETHODCALLS")) {
+			methodCallTracingActive = !methodCallTracingActive;
+			Runtime.getRuntime().traceMethodCalls(methodCallTracingActive);
+			logger.info(String.format(JVNLocale.s("traceMethodCallsInfo"),
+					methodCallTracingActive));
 		} else {
 			//Wut command is that?
 			logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
 		}
 	}
-	
+
 	//Check the keybinds
 	public static void checkKeyBinds() {
 		//Debug console
@@ -194,11 +212,7 @@ public class DebugUI {
 				char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 				String typed = Character.toString(alphabet[key-Input.Keys.A]);
 				//TODO Implement capslock somehow
-				if(isShift()) {
-					typed = typed.toUpperCase();
-				} else {
-					typed = typed.toLowerCase();
-				}
+				typed = isShift() ? typed.toUpperCase() : typed.toLowerCase();
 				return typed;
 			}
 		}
@@ -222,82 +236,38 @@ public class DebugUI {
 			return " ";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.COMMA)) {
-			if(isShift()) {
-				return "<";
-			} else {
-				return ",";
-			}
+			return isShift() ? "<" : ",";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.PERIOD)) {
-			if(isShift()) {
-				return ">";
-			} else {
-				return ".";
-			}
+			return isShift() ? ">" : ".";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SLASH)) {
-			if(isShift()) {
-				return "?";
-			} else {
-				return "/";
-			}
+			return isShift() ? "?" : "/";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.APOSTROPHE)) {
-			if(isShift()) {
-				return "\"";
-			} else {
-				return "'";
-			}
+			return isShift() ? "\"" : "'";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SEMICOLON)) {
-			if(isShift()) {
-				return ":";
-			} else {
-				return ";";
-			}
+			return isShift() ? ":" : ";";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT_BRACKET)) {
-			if(isShift()) {
-				return "{";
-			} else {
-				return "[";
-			}
+			return isShift() ? "{" : "[";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT_BRACKET)) {
-			if(isShift()) {
-				return "}";
-			} else {
-				return "]";
-			}
+			return isShift() ? "}" : "]";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT_BRACKET)) {
-			if(isShift()) {
-				return "{";
-			} else {
-				return "[";
-			}
+			return isShift() ? "{" : "[";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSLASH)) {
-			if(isShift()) {
-				return "|";
-			} else {
-				//Don't get confused here :/
-				return "\\";
-			}
+			//Don't get confused here :/
+			return isShift() ? "|" : "\\";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
-			if(isShift()) {
-				return "_";
-			} else {
-				return "-";
-			}
+			return isShift() ? "_" : "-";
 		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
-			if(isShift()) {
-				return "+";
-			} else {
-				return "=";
-			}
+			return isShift() ? "+" : "=";
 		}
 		return "";
 	}
@@ -306,7 +276,7 @@ public class DebugUI {
 	public static String getStringRepresentation(ArrayList<Character> list)
 	{    
 		StringBuilder builder = new StringBuilder(list.size());
-		for(Character ch: list)
+		for(Character ch : list)
 		{
 			builder.append(ch);
 		}
