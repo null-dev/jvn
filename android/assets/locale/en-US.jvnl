@@ -20,3 +20,4 @@ traceMethodCallsInfo: Method call tracing turned %b!
 stateLoggerPaused: JVN paused!
 stateLoggerResumed: JVN resumed!
 stateLoggerResized: JVN window resized to: %s, %s!
+stateLoggerFullscreen: Fullscreen turned to: %b!

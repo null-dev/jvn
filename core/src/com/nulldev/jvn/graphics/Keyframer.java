@@ -72,20 +72,19 @@ public class Keyframer {
 	//Tick
 	public void tick() {
 		//Tick coord
-		if(coordIncrementRateX != 0
-				|| coordIncrementRateY != 0) {
+		if(!coordinatesDone()) {
 			tickCoord();
 		}
 		//Tick rotation
-		if(rotationIncrementRate != 0) {
+		if(!rotationDone()) {
 			tickRotation();
 		}
 		//Tick scale
-		if(scaleIncrementRate != 0) {
+		if(!scaleDone()) {
 			tickScale();
 		}
 		//Tick opacity
-		if(opacityIncrementRate != 0) {
+		if(!opacityDone()) {
 			tickOpacity();
 		}
 	}
@@ -168,5 +167,20 @@ public class Keyframer {
 			//Update last tick
 			opacityLastTickMs = curMs;
 		}
+	}
+	
+	//Are the keyframes done?
+	public boolean coordinatesDone() {
+		return (coordIncrementRateX == 0
+				&& coordIncrementRateY == 0);
+	}
+	public boolean rotationDone() {
+		return rotationIncrementRate == 0;
+	}
+	public boolean scaleDone() {
+		return scaleIncrementRate == 0;
+	}
+	public boolean opacityDone() {
+		return opacityIncrementRate == 0;
 	}
 }

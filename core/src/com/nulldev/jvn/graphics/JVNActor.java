@@ -18,10 +18,14 @@ public abstract class JVNActor {
 	int zindex = 0;
 	
 	//Set a keyframer
-	public JVNActor addKeyframer(Keyframer keyframer) {
+	public JVNActor setKeyframer(Keyframer keyframer) {
 		this.keyframer = keyframer;
 		this.keyframer.setActor(this);
 		return this;
+	}
+	
+	public Keyframer getKeyframer() {
+		return this.keyframer;
 	}
 	
 	//Tick

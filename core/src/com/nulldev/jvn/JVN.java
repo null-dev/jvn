@@ -1,6 +1,5 @@
 package com.nulldev.jvn;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -12,10 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nulldev.jvn.debug.DebugUI;
 import com.nulldev.jvn.debug.JVNLogger;
-import com.nulldev.jvn.graphics.DrawableActor;
+import com.nulldev.jvn.demo.DemoSplash;
+import com.nulldev.jvn.graphics.Graphics;
 import com.nulldev.jvn.graphics.JVNActor;
-import com.nulldev.jvn.graphics.JVNCoordinate;
-import com.nulldev.jvn.graphics.Keyframer;
 import com.nulldev.jvn.locale.JVNLocale;
 
 /*
@@ -32,12 +30,17 @@ public class JVN extends ApplicationAdapter {
 	Texture img;
 	public static OrthographicCamera camera;
 	HashMap<String, Object> launcherParams;
-	JVNLogger stateLogger;
+	public static JVNLogger stateLogger;
 	JVNLogger coreLogger;
 	//We want our new map to be sorted!
 	//public static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
-	public static TreeMap<Integer, JVNActor> actorList=  new TreeMap<Integer, JVNActor>(Collections.reverseOrder());
+	public static TreeMap<Integer, JVNActor> actorList=  new TreeMap<Integer, JVNActor>();
 
+	//DEMO STUFF
+	DemoSplash ds = new DemoSplash();
+	
+	//VARIABLES
+	
 	JVNNative nativeCode;
 
 	//Launcher can pass parameters
@@ -72,20 +75,23 @@ public class JVN extends ApplicationAdapter {
 			//Create camera
 			camera = new OrthographicCamera(Gdx.graphics.getWidth()
 					, Gdx.graphics.getHeight());
+			camera.position.set(1280/2, 720/2, 0);
+			camera.update();
 			batch = new SpriteBatch();
 			img = new Texture("badlogic.jpg");
 
 			//Add test drawable actor
-			DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
+			/*DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
-			tempActor.addKeyframer(tempKeyframer);
+			tempActor.setKeyframer(tempKeyframer);
 			//You must add the keyframer to an actor first, then keyframe coords and stuff
 			tempKeyframer.keyframeCoordinate(new JVNCoordinate(camera.viewportWidth,0), 2000);
 			tempKeyframer.keyframeOpacity(0f, 2000);
 			tempKeyframer.keyframeRotation(90, 2000);
 			tempKeyframer.keyframeScale(2f, 2000);
-			actorList.put(tempActor.getZIndex(), tempActor);
+			actorList.put(tempActor.getZIndex(), tempActor);*/
+			Graphics.fullscreen(false);
 		} catch(Exception e) {
 			creationLogger.severe(JVNLocale.s("creationError"));
 			e.printStackTrace();
@@ -101,12 +107,13 @@ public class JVN extends ApplicationAdapter {
 	@Override
 	public void render () {
 		try {
-			camera.update();
-
 			//Configure graphics
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+			
+			//Tick the demo scene
+			ds.tick();
+			
 			//Tick everything
 			TickManager.tick();
 			//Render everything
@@ -139,7 +146,8 @@ public class JVN extends ApplicationAdapter {
 		//Resize the camera
 		camera.viewportHeight = height;
 		camera.viewportWidth = width;
-
+		camera.update();
+		
 		stateLogger.info(String.format(JVNLocale.s("stateLoggerResized"), height, width));
 	}
 

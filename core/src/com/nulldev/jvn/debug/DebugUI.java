@@ -1,7 +1,6 @@
 package com.nulldev.jvn.debug;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -17,6 +16,7 @@ import com.nulldev.jvn.JVN;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.TickManager;
 import com.nulldev.jvn.graphics.DrawableActor;
+import com.nulldev.jvn.graphics.Graphics;
 import com.nulldev.jvn.graphics.JVNCoordinate;
 import com.nulldev.jvn.graphics.Keyframer;
 import com.nulldev.jvn.locale.JVNLocale;
@@ -57,38 +57,42 @@ public class DebugUI {
 						&& typedCharacters.size() != 0) {
 					typedCharacters.remove(typedCharacters.size()-1);
 				}
+				
 				//Cycle through commands
-				if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-					if(commandIndex == -2) {
-						commandIndex = previousCommands.size();
-						//Stupid warning...
-						currentCommand = (ArrayList<Character>) typedCharacters.clone();
-					}
-					commandIndex--;
-					if(commandIndex == -1) {
-						commandIndex = 0;
-					}
-					
-					typedCharacters.clear();
-					for (char c : previousCommands.get(commandIndex).toCharArray()) {
-						typedCharacters.add(c);
-					}
-				}
-				if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-					if(commandIndex != -2) {
-						commandIndex++;
-						if(commandIndex == previousCommands.size()) {
-							commandIndex = -2;
+				if(previousCommands.size() != 0) {
+					if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+						if(commandIndex == -2) {
+							commandIndex = previousCommands.size();
 							//Stupid warning...
-							typedCharacters = (ArrayList<Character>) currentCommand.clone();
-						} else {
-							typedCharacters.clear();
-							for (char c : previousCommands.get(commandIndex).toCharArray()) {
-								typedCharacters.add(c);
+							currentCommand = (ArrayList<Character>) typedCharacters.clone();
+						}
+						commandIndex--;
+						if(commandIndex == -1) {
+							commandIndex = 0;
+						}
+						
+						typedCharacters.clear();
+						for (char c : previousCommands.get(commandIndex).toCharArray()) {
+							typedCharacters.add(c);
+						}
+					}
+					if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+						if(commandIndex != -2) {
+							commandIndex++;
+							if(commandIndex == previousCommands.size()) {
+								commandIndex = -2;
+								//Stupid warning...
+								typedCharacters = (ArrayList<Character>) currentCommand.clone();
+							} else {
+								typedCharacters.clear();
+								for (char c : previousCommands.get(commandIndex).toCharArray()) {
+									typedCharacters.add(c);
+								}
 							}
 						}
 					}
 				}
+				
 				//Press enter yeah!
 				if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 					if(typedCharacters.size() != 0) {
@@ -118,9 +122,9 @@ public class DebugUI {
 			DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
-			tempActor.addKeyframer(tempKeyframer);
+			tempActor.setKeyframer(tempKeyframer);
 			//You must add the keyframer to an actor first, then keyframe coords and stuff
-			tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.viewportWidth,0), 2000);
+			tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.position.x,0), 2000);
 			tempKeyframer.keyframeOpacity(0f, 2000);
 			tempKeyframer.keyframeRotation(90, 2000);
 			tempKeyframer.keyframeScale(2f, 2000);
@@ -140,6 +144,8 @@ public class DebugUI {
 			Runtime.getRuntime().traceMethodCalls(methodCallTracingActive);
 			logger.info(String.format(JVNLocale.s("traceMethodCallsInfo"),
 					methodCallTracingActive));
+		} else if(splitCommands[0].equalsIgnoreCase("FULLSCREEN")) {
+			Graphics.fullscreen(!Graphics.fullscreen);
 		} else {
 			//Wut command is that?
 			logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
@@ -186,9 +192,9 @@ public class DebugUI {
 		sr.setProjectionMatrix(camera.combined);
 		sr.begin(ShapeType.Filled);
 		sr.setColor(0.9f, 0.9f, 0.9f, 0.7f);
-		sr.rect(camera.viewportWidth/-2,
-				camera.viewportHeight/-2,
-				Gdx.graphics.getWidth(), 20);
+		sr.rect(0,
+				0,
+				JVN.camera.position.x*2, 20);
 		sr.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 
@@ -197,8 +203,8 @@ public class DebugUI {
 		batch.setProjectionMatrix(camera.combined);
 		debugConsoleFont.setColor(0, 0, 0, 1);
 		debugConsoleFont.draw(batch, "debug> " + getStringRepresentation(typedCharacters) + "_",
-				camera.viewportWidth/-2+3,
-				camera.viewportHeight/-2+16);
+				0+3,
+				0+16);
 		batch.end();
 
 		//Render program log
@@ -223,8 +229,8 @@ public class DebugUI {
 					line = line.replaceFirst("SEVR", "");
 				}
 				debugConsoleFont.draw(batch, line,
-						camera.viewportWidth/-2+3,
-						camera.viewportHeight/-2+firstCord+i*increment);
+						3,
+						firstCord+i*increment);
 			}
 		}
 		batch.end();

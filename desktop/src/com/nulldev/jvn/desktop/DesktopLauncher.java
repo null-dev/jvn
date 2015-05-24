@@ -9,6 +9,7 @@ import com.nulldev.jvn.JVN;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.resizable = false;
 		//Pass launcher params
 		new LwjglApplication(new JVN(new HashMap<String, Object>()), config);
 	}

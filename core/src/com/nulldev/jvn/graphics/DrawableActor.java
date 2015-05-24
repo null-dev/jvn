@@ -8,7 +8,25 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class DrawableActor extends JVNActor {
 	
 	Texture tex = null;
+	int xorigin = 0;
+	int yorigin = 0;
 	
+	public int getXorigin() {
+		return xorigin;
+	}
+
+	public void setXorigin(int xorigin) {
+		this.xorigin = xorigin;
+	}
+
+	public int getYorigin() {
+		return yorigin;
+	}
+
+	public void setYorigin(int yorigin) {
+		this.yorigin = yorigin;
+	}
+
 	//Blank constructor
 	public DrawableActor() {}
 	
@@ -26,12 +44,12 @@ public class DrawableActor extends JVNActor {
 		batch.draw(new TextureRegion(tex),
 				this.getCoordinates().getX(),
 				this.getCoordinates().getY(),
-				0,
-				0,
-				tex.getWidth(),
-				tex.getHeight(),
-				this.getScale(),
-				this.getScale(),
+				xorigin,
+				yorigin,
+				tex.getWidth()*this.getScale(),
+				tex.getHeight()*this.getScale(),
+				1,
+				1,
 				rotation);
 		batch.end();
 	}

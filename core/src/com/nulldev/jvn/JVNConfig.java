@@ -19,6 +19,8 @@ public class JVNConfig {
 		putObject("locale-dir", "locale");
 		//What is the current locale?
 		putObject("locale", "en-US");
+		//Default screen resoulution
+		putObject("defaultRes", "1280x720");
 	}
 	
 	//Get the raw config map...
