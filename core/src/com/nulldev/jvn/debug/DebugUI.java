@@ -1,6 +1,7 @@
 package com.nulldev.jvn.debug;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -33,6 +34,10 @@ public class DebugUI {
 	static BitmapFont debugConsoleFont = new BitmapFont();
 	static ArrayList<Character> typedCharacters = new ArrayList<Character>();
 
+	static ArrayList<String> previousCommands = new ArrayList<String>();
+	static int commandIndex = -2;
+	static ArrayList<Character> currentCommand = new ArrayList<Character>();
+
 	static boolean instructionTracingActive = false;
 	static boolean methodCallTracingActive = false;
 
@@ -52,6 +57,38 @@ public class DebugUI {
 						&& typedCharacters.size() != 0) {
 					typedCharacters.remove(typedCharacters.size()-1);
 				}
+				//Cycle through commands
+				if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+					if(commandIndex == -2) {
+						commandIndex = previousCommands.size();
+						//Stupid warning...
+						currentCommand = (ArrayList<Character>) typedCharacters.clone();
+					}
+					commandIndex--;
+					if(commandIndex == -1) {
+						commandIndex = 0;
+					}
+					
+					typedCharacters.clear();
+					for (char c : previousCommands.get(commandIndex).toCharArray()) {
+						typedCharacters.add(c);
+					}
+				}
+				if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+					if(commandIndex != -2) {
+						commandIndex++;
+						if(commandIndex == previousCommands.size()) {
+							commandIndex = -2;
+							//Stupid warning...
+							typedCharacters = (ArrayList<Character>) currentCommand.clone();
+						} else {
+							typedCharacters.clear();
+							for (char c : previousCommands.get(commandIndex).toCharArray()) {
+								typedCharacters.add(c);
+							}
+						}
+					}
+				}
 				//Press enter yeah!
 				if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 					if(typedCharacters.size() != 0) {
@@ -60,6 +97,8 @@ public class DebugUI {
 						//No longer needed
 						//logger.info(String.format(JVNLocale.s("debugConsoleIssueCommand"), command));
 						executeDebugCommand(command);
+						//Reset command index
+						commandIndex = -2;
 					}
 				}
 			}
@@ -68,6 +107,8 @@ public class DebugUI {
 
 	//Execute debug commands
 	public static void executeDebugCommand(String command) {
+		//Add this command to previous commands
+		previousCommands.add(command);
 		String[] splitCommands = command.split(" ");
 		//Get the TPS (FPS)
 		if(splitCommands[0].equalsIgnoreCase("GETTPS")) {
@@ -119,6 +160,8 @@ public class DebugUI {
 					debugConsoleActive = false;
 					logger.info(JVNLocale.s("debugOff"));
 					Gdx.input.setOnscreenKeyboardVisible(false);
+					//Reset command index
+					commandIndex = -2;
 				} else {
 					debugConsoleActive = true;
 					logger.info(JVNLocale.s("debugOn"));
