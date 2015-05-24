@@ -76,7 +76,7 @@ public class JVN extends ApplicationAdapter {
 			img = new Texture("badlogic.jpg");
 
 			//Add test drawable actor
-			DrawableActor tempActor = new DrawableActor(new Texture("img/icon_white.png"));
+			DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
 			tempActor.addKeyframer(tempKeyframer);

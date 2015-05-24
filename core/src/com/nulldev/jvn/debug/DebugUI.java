@@ -74,7 +74,7 @@ public class DebugUI {
 			logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
 			//Spawn an actor just for testing
 		} else if(splitCommands[0].equalsIgnoreCase("TESTACTOR")) {
-			DrawableActor tempActor = new DrawableActor(new Texture("img/icon_white.png"));
+			DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
 			tempActor.addKeyframer(tempKeyframer);

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.debug.JVNLogger;
 
@@ -27,13 +28,13 @@ public class JVNLocale {
 		
 		messageList.clear();
 		//Construct locale file
-		File localeFile = new File(JVNConfig.readString("locale-dir")
+		String localeFile = JVNConfig.readString("locale-dir")
 				+ File.separator
 				+ locale
-				+ ".jvnl");
+				+ ".jvnl";
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(localeFile));
+			br = new BufferedReader(new FileReader(Gdx.files.internal(localeFile).file()));
 		} catch (FileNotFoundException e) {
 			logger.warning("Failed to find locale file for: "
 					+ locale
@@ -43,12 +44,12 @@ public class JVNLocale {
 			
 			//Try the default locale now...
 			locale = JVNConfig.readString("locale");
-			localeFile = new File(JVNConfig.readString("locale-dir")
+			localeFile = JVNConfig.readString("locale-dir")
 					+ File.separator
 					+ locale
-					+ ".jvnl");
+					+ ".jvnl";
 			try {
-				br = new BufferedReader(new FileReader(localeFile));
+				br = new BufferedReader(new FileReader(Gdx.files.internal(localeFile).file()));
 			} catch (FileNotFoundException e1) {
 				logger.severe("Failed to refresh locale, could not fall back to default locale!");
 				e1.printStackTrace();
