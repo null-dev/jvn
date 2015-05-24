@@ -74,7 +74,7 @@ public class DebugUI {
 			logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
 			//Spawn an actor just for testing
 		} else if(splitCommands[0].equalsIgnoreCase("TESTACTOR")) {
-			DrawableActor tempActor = new DrawableActor(new Texture("assets/icon_white.png"));
+			DrawableActor tempActor = new DrawableActor(new Texture("img/icon_white.png"));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
 			tempActor.addKeyframer(tempKeyframer);
@@ -93,6 +93,7 @@ public class DebugUI {
 			Runtime.getRuntime().traceInstructions(instructionTracingActive);
 			logger.info(String.format(JVNLocale.s("traceInstructionsInfo"),
 					instructionTracingActive));
+			//Trace method calls
 		} else if(splitCommands[0].equalsIgnoreCase("TRACEMETHODCALLS")) {
 			methodCallTracingActive = !methodCallTracingActive;
 			Runtime.getRuntime().traceMethodCalls(methodCallTracingActive);

@@ -1,5 +1,11 @@
 //This is an example locale file for the English language
 
+//Errors
+creationError: JVN encountered an error during the initialization sequence!
+ignoringError: Ignoring because of debug mode!
+abortError: Aborting...
+tickRenderError: JVN encountered an error while ticking/rendering!
+
 //Debug localizations...
 debugOn: Debug console enabled!
 debugOff: Debug console disabled!

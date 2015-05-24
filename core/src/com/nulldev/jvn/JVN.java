@@ -33,12 +33,13 @@ public class JVN extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	HashMap<String, Object> launcherParams;
 	JVNLogger stateLogger;
+	JVNLogger coreLogger;
 	//We want our new map to be sorted!
 	//public static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
 	public static TreeMap<Integer, JVNActor> actorList=  new TreeMap<Integer, JVNActor>(Collections.reverseOrder());
-	
+
 	JVNNative nativeCode;
-	
+
 	//Launcher can pass parameters
 	public JVN(HashMap<String, Object> launcherParams) {
 		this.launcherParams = launcherParams;
@@ -46,7 +47,7 @@ public class JVN extends ApplicationAdapter {
 			this.launcherParams = new HashMap<String, Object>();
 		}
 	}
-	
+
 	@Override
 	public void create () {
 		JVNLogger creationLogger = new JVNLogger("JVNInit");
@@ -54,72 +55,101 @@ public class JVN extends ApplicationAdapter {
 		creationLogger.info("Initializing JVN...");
 		//Localize the program...
 		if(!JVNLocale.loadLocale(JVNConfig.readString("locale"))) {
-			creationLogger.severe("Failed to initialize localizations! Aborting...");
-			System.exit(-1);
+			if(JVNConfig.readBoolean("debug")) {
+				creationLogger.severe("Failed to initialize localizations! Ignoring because of debug mode! Errors will be frequent!");
+			} else {
+				creationLogger.severe("Failed to initialize localizations! Aborting...");
+				System.exit(-1);
+			}
 		}
 		//Create state logger
 		stateLogger = new JVNLogger("StateLogger");
-		//Print device info...
-		DebugUI.printDeviceInfo();
-		//Create camera
-		camera = new OrthographicCamera(Gdx.graphics.getWidth()
-				, Gdx.graphics.getHeight());
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-		
-		//Add test drawable actor
-		DrawableActor tempActor = new DrawableActor(new Texture("assets/icon_white.png"));
-		tempActor.setScale(0.5f);
-		Keyframer tempKeyframer = new Keyframer();
-		tempActor.addKeyframer(tempKeyframer);
-		//You must add the keyframer to an actor first, then keyframe coords and stuff
-		tempKeyframer.keyframeCoordinate(new JVNCoordinate(camera.viewportWidth,0), 2000);
-		tempKeyframer.keyframeOpacity(0f, 2000);
-		tempKeyframer.keyframeRotation(90, 2000);
-		tempKeyframer.keyframeScale(2f, 2000);
-		actorList.put(tempActor.getZIndex(), tempActor);
+		//Create core logger
+		coreLogger = new JVNLogger("Core");
+		try{ 
+			//Print device info...
+			DebugUI.printDeviceInfo();
+			//Create camera
+			camera = new OrthographicCamera(Gdx.graphics.getWidth()
+					, Gdx.graphics.getHeight());
+			batch = new SpriteBatch();
+			img = new Texture("badlogic.jpg");
+
+			//Add test drawable actor
+			DrawableActor tempActor = new DrawableActor(new Texture("img/icon_white.png"));
+			tempActor.setScale(0.5f);
+			Keyframer tempKeyframer = new Keyframer();
+			tempActor.addKeyframer(tempKeyframer);
+			//You must add the keyframer to an actor first, then keyframe coords and stuff
+			tempKeyframer.keyframeCoordinate(new JVNCoordinate(camera.viewportWidth,0), 2000);
+			tempKeyframer.keyframeOpacity(0f, 2000);
+			tempKeyframer.keyframeRotation(90, 2000);
+			tempKeyframer.keyframeScale(2f, 2000);
+			actorList.put(tempActor.getZIndex(), tempActor);
+		} catch(Exception e) {
+			creationLogger.severe(JVNLocale.s("creationError"));
+			e.printStackTrace();
+			if(JVNConfig.readBoolean("debug")) {
+				creationLogger.severe(JVNLocale.s("ignoringError"));
+			} else {
+				creationLogger.severe(JVNLocale.s("abortError"));
+				System.exit(-1);
+			}
+		}
 	}
 
 	@Override
 	public void render () {
-		camera.update();
-		
-		//Configure graphics
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		//Tick everything
-		TickManager.tick();
-		//Render everything
-		TickManager.render(batch);
-		
-		//Debug stuff
-		//ALWAYS PUT THIS LAST! (So it can be ontop of everything)
-		DebugUI.debugLoop(camera);
+		try {
+			camera.update();
+
+			//Configure graphics
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			//Tick everything
+			TickManager.tick();
+			//Render everything
+			TickManager.render(batch);
+
+		} catch(Exception e) {
+			coreLogger.severe(JVNLocale.s("tickRenderError"));
+			e.printStackTrace();
+			if(JVNConfig.readBoolean("debug")) {
+				coreLogger.severe(JVNLocale.s("ignoringError"));
+			} else {
+				coreLogger.severe(JVNLocale.s("abortError"));
+				System.exit(-1);
+			}
+		} finally {
+			//Debug stuff
+			//ALWAYS PUT THIS LAST! (So it can be ontop of everything)
+			DebugUI.debugLoop(camera);
+		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		DebugUI.dispose();
 		batch.dispose();
 	}
-	
+
 	@Override
-    public void resize(int width, int height) {
+	public void resize(int width, int height) {
 		//Resize the camera
 		camera.viewportHeight = height;
 		camera.viewportWidth = width;
-		
+
 		stateLogger.info(String.format(JVNLocale.s("stateLoggerResized"), height, width));
-    }
+	}
 
-    @Override
-    public void pause() {
-    	stateLogger.info(JVNLocale.s("stateLoggerPaused"));
-    }
+	@Override
+	public void pause() {
+		stateLogger.info(JVNLocale.s("stateLoggerPaused"));
+	}
 
-    @Override
-    public void resume() {
-    	stateLogger.info(JVNLocale.s("stateLoggerResumed"));
-    }
+	@Override
+	public void resume() {
+		stateLogger.info(JVNLocale.s("stateLoggerResumed"));
+	}
 }
