@@ -14,6 +14,8 @@ public abstract class JVNActor {
 	float scale = 1f;
 	//Opacity 0-1
 	float opacity = 1f;
+	//Z index
+	int zindex = 0;
 	
 	//Set a keyframer
 	public JVNActor addKeyframer(Keyframer keyframer) {
@@ -67,6 +69,15 @@ public abstract class JVNActor {
 
 	public JVNActor setOpacity(float opacity) {
 		this.opacity = opacity;
+		return this;
+	}
+	
+	public int getZIndex() {
+		return this.zindex;
+	}
+	
+	public JVNActor setZIndex(int zindex) {
+		this.zindex = zindex;
 		return this;
 	}
 }

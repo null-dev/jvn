@@ -1,7 +1,8 @@
 package com.nulldev.jvn;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -29,10 +30,12 @@ import com.nulldev.jvn.locale.JVNLocale;
 public class JVN extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
-	OrthographicCamera camera;
+	public static OrthographicCamera camera;
 	HashMap<String, Object> launcherParams;
 	JVNLogger stateLogger;
-	static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
+	//We want our new map to be sorted!
+	//public static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
+	public static TreeMap<Integer, JVNActor> actorList=  new TreeMap<Integer, JVNActor>(Collections.reverseOrder());
 	
 	JVNNative nativeCode;
 	
@@ -65,14 +68,16 @@ public class JVN extends ApplicationAdapter {
 		img = new Texture("badlogic.jpg");
 		
 		//Add test drawable actor
-		DrawableActor tempActor = new DrawableActor(img);
+		DrawableActor tempActor = new DrawableActor(new Texture("assets/icon_white.png"));
+		tempActor.setScale(0.5f);
 		Keyframer tempKeyframer = new Keyframer();
 		tempActor.addKeyframer(tempKeyframer);
-		tempKeyframer.keyframeCoordinate(new JVNCoordinate(500,500), 2000);
+		//You must add the keyframer to an actor first, then keyframe coords and stuff
+		tempKeyframer.keyframeCoordinate(new JVNCoordinate(camera.viewportWidth,0), 2000);
 		tempKeyframer.keyframeOpacity(0f, 2000);
 		tempKeyframer.keyframeRotation(90, 2000);
-		tempKeyframer.keyframeScale(5, 2000);
-		actorList.add(tempActor);
+		tempKeyframer.keyframeScale(2f, 2000);
+		actorList.put(tempActor.getZIndex(), tempActor);
 	}
 
 	@Override

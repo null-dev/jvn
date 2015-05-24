@@ -7,12 +7,17 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.nulldev.jvn.JVN;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.TickManager;
+import com.nulldev.jvn.graphics.DrawableActor;
+import com.nulldev.jvn.graphics.JVNCoordinate;
+import com.nulldev.jvn.graphics.Keyframer;
 import com.nulldev.jvn.locale.JVNLocale;
 
 /*
@@ -64,6 +69,17 @@ public class DebugUI {
 		//Get the TPS (FPS)
 		if(splitCommands[0].equalsIgnoreCase("GETTPS")) {
 			logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
+		} else if(splitCommands[0].equalsIgnoreCase("TESTACTOR")) {
+			DrawableActor tempActor = new DrawableActor(new Texture("assets/icon_white.png"));
+			tempActor.setScale(0.5f);
+			Keyframer tempKeyframer = new Keyframer();
+			tempActor.addKeyframer(tempKeyframer);
+			//You must add the keyframer to an actor first, then keyframe coords and stuff
+			tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.viewportWidth,0), 2000);
+			tempKeyframer.keyframeOpacity(0f, 2000);
+			tempKeyframer.keyframeRotation(90, 2000);
+			tempKeyframer.keyframeScale(2f, 2000);
+			JVN.actorList.put(tempActor.getZIndex(), tempActor);
 		} else {
 			//Wut command is that?
 			logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
