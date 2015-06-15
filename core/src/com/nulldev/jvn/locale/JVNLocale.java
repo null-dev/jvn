@@ -9,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.debug.JVNLogger;
-import sun.plugin.dom.exception.InvalidStateException;
 
 /*
  * JVNLocale allows JVN and JVN novels to be easily translated into other languages with little or no modification of the original code!
@@ -103,7 +102,7 @@ public class JVNLocale {
 	//Used for getting the actual string from the locale
 	public static String s(String text) {
         if(!localeInitialized) {
-            throw new InvalidStateException("Locale not initialized!");
+            throw new IllegalStateException("Locale not initialized!");
         }
 		return messageList.get(text);
 	}
