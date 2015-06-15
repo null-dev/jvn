@@ -32,11 +32,11 @@ public class DebugUI {
 	static SpriteBatch batch = new SpriteBatch();
 	static ShapeRenderer sr = new ShapeRenderer();
 	static BitmapFont debugConsoleFont = new BitmapFont();
-	static ArrayList<Character> typedCharacters = new ArrayList<Character>();
+	static ArrayList<Character> typedCharacters = new ArrayList<>();
 
-	static ArrayList<String> previousCommands = new ArrayList<String>();
+	static ArrayList<String> previousCommands = new ArrayList<>();
 	static int commandIndex = -2;
-	static ArrayList<Character> currentCommand = new ArrayList<Character>();
+	static ArrayList<Character> currentCommand = new ArrayList<>();
 
 	static boolean instructionTracingActive = false;
 	static boolean methodCallTracingActive = false;
@@ -63,7 +63,7 @@ public class DebugUI {
 					if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 						if(commandIndex == -2) {
 							commandIndex = previousCommands.size();
-							//Stupid warning...
+							//Stupid warning, I don't think typedCharacters.clone() can return anything else...
 							currentCommand = (ArrayList<Character>) typedCharacters.clone();
 						}
 						commandIndex--;
@@ -81,7 +81,7 @@ public class DebugUI {
 							commandIndex++;
 							if(commandIndex == previousCommands.size()) {
 								commandIndex = -2;
-								//Stupid warning...
+                                //Stupid warning, I don't think currentCommand.clone() can return anything else...
 								typedCharacters = (ArrayList<Character>) currentCommand.clone();
 							} else {
 								typedCharacters.clear();
@@ -203,8 +203,8 @@ public class DebugUI {
 		batch.setProjectionMatrix(camera.combined);
 		debugConsoleFont.setColor(0, 0, 0, 1);
 		debugConsoleFont.draw(batch, "debug> " + getStringRepresentation(typedCharacters) + "_",
-				0+3,
-				0+16);
+                3,
+                16);
 		batch.end();
 
 		//Render program log
@@ -335,11 +335,7 @@ public class DebugUI {
 
 	//Is shift key down?
 	public static boolean isShift() {
-		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
-				|| Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-			return true;
-		} else {
-			return false;
-		}
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
+                || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
 	}
 }

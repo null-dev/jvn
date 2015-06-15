@@ -2,8 +2,6 @@ package com.nulldev.jvn.locale;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -11,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.nulldev.jvn.JVNConfig;
 import com.nulldev.jvn.debug.JVNLogger;
+import sun.plugin.dom.exception.InvalidStateException;
 
 /*
  * JVNLocale allows JVN and JVN novels to be easily translated into other languages with little or no modification of the original code!
@@ -18,9 +17,9 @@ import com.nulldev.jvn.debug.JVNLogger;
  */
 
 public class JVNLocale {
-	public static String currentLocale;
-	public static HashMap<String, String> messageList = new HashMap<String, String>();
+	public static HashMap<String, String> messageList = new HashMap<>();
 	private static JVNLogger logger = new JVNLogger("JLocale");
+    public static boolean localeInitialized = false;
 
 	//Only call this once, on the creation of JVN or when the locale is changed
 	//Returns false on failure, otherwise, returns true!
@@ -33,7 +32,7 @@ public class JVNLocale {
 				+ File.separator
 				+ locale
 				+ ".jvnl";
-		BufferedReader br = null;
+		BufferedReader br;
 		try {
 			br = new BufferedReader(Gdx.files.internal(localeFile).reader());
 		} catch (GdxRuntimeException e) {
@@ -89,21 +88,23 @@ public class JVNLocale {
 			return false;
 		} finally {
 			//Close it at the end
-			if(br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					logger.warning("Failed to close BufferedReader, ignoring!");
-					e.printStackTrace();
-				}
-			}
-		}
+            try {
+                br.close();
+            } catch (IOException e) {
+                logger.warning("Failed to close BufferedReader, ignoring!");
+                e.printStackTrace();
+            }
+        }
+        localeInitialized = true;
 		logger.info("Refreshed locale: " + locale + " successfully!");
 		return true;
 	}
 	
 	//Used for getting the actual string from the locale
 	public static String s(String text) {
+        if(!localeInitialized) {
+            throw new InvalidStateException("Locale not initialized!");
+        }
 		return messageList.get(text);
 	}
 }

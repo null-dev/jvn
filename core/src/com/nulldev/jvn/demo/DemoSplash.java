@@ -27,7 +27,7 @@ public class DemoSplash {
 			demoSplashLogo.setRotation(-50f);
 			JVNCoordinate coords = new JVNCoordinate();
 			coords.setX(JVN.camera.position.x/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getWidth()/2));
-			coords.setY(JVN.camera.position.y/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getHeight()/4));
+			coords.setY(JVN.camera.position.y/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getHeight()/3));
 			demoSplashLogo.setCoordinates(coords);
 			Keyframer demoKeyframer = new Keyframer();
 			demoSplashLogo.setKeyframer(demoKeyframer);
@@ -39,7 +39,7 @@ public class DemoSplash {
 		} else if(!splashMiddle) {
 			DrawableActor demoSplashLogo = (DrawableActor) JVN.actorList.get(999);
 			demoSplashLogo.getCoordinates().setX(JVN.camera.position.x/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getWidth()/2));
-			demoSplashLogo.getCoordinates().setY(JVN.camera.position.y/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getHeight()/4));
+			demoSplashLogo.getCoordinates().setY(JVN.camera.position.y/2-(demoSplashLogo.getScale()*demoSplashLogo.getTexture().getHeight()/3));
 			if(demoSplashLogo.getKeyframer().opacityDone()) {
 				demoSplashLogo.getKeyframer().keyframeOpacity(1f, 2000);
 				splashMiddle = true;

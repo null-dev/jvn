@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class JVNLogger extends Logger {
 	
 	String taskName;
-	public static ArrayList<String> programOutput = new ArrayList<String>();
+	public static ArrayList<String> programOutput = new ArrayList<>();
 	
 	//Create a new logger with a name for the task
 	public JVNLogger(String task) {

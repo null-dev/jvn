@@ -34,20 +34,21 @@ public class JVN extends ApplicationAdapter {
 	JVNLogger coreLogger;
 	//We want our new map to be sorted!
 	//public static ArrayList<JVNActor> actorList = new ArrayList<JVNActor>();
-	public static TreeMap<Integer, JVNActor> actorList=  new TreeMap<Integer, JVNActor>();
+	public static TreeMap<Integer, JVNActor> actorList= new TreeMap<>();
 
 	//DEMO STUFF
 	DemoSplash ds = new DemoSplash();
 	
 	//VARIABLES
 	
-	JVNNative nativeCode;
+	//JVNNative nativeCode;
+    //TODO IMPLEMENT NATIVE CODE
 
 	//Launcher can pass parameters
 	public JVN(HashMap<String, Object> launcherParams) {
 		this.launcherParams = launcherParams;
 		if(this.launcherParams == null) {
-			this.launcherParams = new HashMap<String, Object>();
+			this.launcherParams = new HashMap<>();
 		}
 	}
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class JVNConfig {
 	private final static HashMap<String, Object> config =
-			new HashMap<String, Object>();
+            new HashMap<>();
 	
 	//FILL THE CONFIGURATION HERE
 	static {
@@ -24,39 +24,39 @@ public class JVNConfig {
 	}
 	
 	//Get the raw config map...
-	public final static HashMap<String, Object> getConfigHashMap() {
+	public static HashMap<String, Object> getConfigHashMap() {
 		return config;
 	}
 	
-	public final static void putObject(String key, Object obj) {
+	public static void putObject(String key, Object obj) {
 		config.put(key.toUpperCase(), obj);
 	}
 	
-	public final static Object readObject(String key) {
+	public static Object readObject(String key) {
 		return config.get(key.toUpperCase());
 	}
 	
-	public final static String readString(String key) {
+	public static String readString(String key) {
 		return (String) JVNConfig.readObject(key);
 	}
 	
-	public final static int readInt(String key) {
+	public static int readInt(String key) {
 		return (Integer) JVNConfig.readObject(key);
 	}
 	
-	public final static float readFloat(String key) {
+	public static float readFloat(String key) {
 		return (Float) JVNConfig.readObject(key);
 	}
 	
-	public final static double readDouble(String key) {
+	public static double readDouble(String key) {
 		return (Double) JVNConfig.readObject(key);
 	}
 	
-	public final static long readLong(String key) {
+	public static long readLong(String key) {
 		return (Long) JVNConfig.readObject(key);
 	}
 	
-	public final static boolean readBoolean(String key) {
+	public static boolean readBoolean(String key) {
 		return (Boolean) JVNConfig.readObject(key);
 	}
 }

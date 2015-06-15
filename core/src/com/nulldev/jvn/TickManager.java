@@ -34,29 +34,3 @@ public class TickManager {
 		}
 	}
 }
-
-class JVNBubbleSorter {
-	  
-    // logic to sort the elements
-    public static JVNActor[] bubble_srt(JVNActor array[]) {
-        int n = array.length;
-        int k;
-        for (int m = n; m >= 0; m--) {
-            for (int i = 0; i < n - 1; i++) {
-                k = i + 1;
-                if (array[i].getZIndex() > array[k].getZIndex()) {
-                    swapNumbers(i, k, array);
-                }
-            }
-        }
-        return array;
-    }
-  
-    private static void swapNumbers(int i, int j, JVNActor[] array) {
-  
-        JVNActor temp;
-        temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}

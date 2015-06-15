@@ -4,7 +4,7 @@ package com.nulldev.jvn.graphics;
  * Basic coordinate class to make my life easier
  */
 
-public class JVNCoordinate {
+public class JVNCoordinate implements Cloneable {
 	private float x;
 	private float y;
 
@@ -42,8 +42,11 @@ public class JVNCoordinate {
 	}
 
 	@Override
-	public JVNCoordinate clone() {
-		return new JVNCoordinate(this.x, this.y);
+	public JVNCoordinate clone() throws CloneNotSupportedException {
+        JVNCoordinate newInstance = (JVNCoordinate) super.clone();
+        newInstance.setX(this.x);
+        newInstance.setY(this.y);
+		return newInstance;
 	}
 
 	@Override
