@@ -25,11 +25,10 @@ public class Keyframer {
 	long opacityLastTickMs = 0;
 	long opacityFinishMs = 0;
 
-	//Internal variable to set actor
-	public Keyframer setActor(JVNActor assignedActor) {
-		this.assignedActor = assignedActor;
-		return this;
-	}
+
+    public Keyframer(JVNActor assignedActor) {
+        this.assignedActor = assignedActor;
+    }
 
 	//Keyframe a coordinate
 	public Keyframer keyframeCoordinate(JVNCoordinate nextCoord, long ms) {

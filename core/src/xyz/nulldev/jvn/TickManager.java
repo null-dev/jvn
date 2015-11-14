@@ -13,7 +13,7 @@ public class TickManager {
 	//Tick everything, execute every frame
 	public static void tick() {
 		//Tick all active actors
-		for(Entry<Integer, JVNActor> actorToTick : JVN.actorList.entrySet()) {
+		for(Entry<Integer, JVNActor> actorToTick : JVN.ACTOR_LIST.entrySet()) {
 			actorToTick.getValue().tick();
 		}
 
@@ -29,7 +29,7 @@ public class TickManager {
 	
 	//Render everything, execute every frame
 	public static void render(SpriteBatch batch) {
-		for(Entry<Integer, JVNActor> actorToRender : JVN.actorList.entrySet()) {
+		for(Entry<Integer, JVNActor> actorToRender : JVN.ACTOR_LIST.entrySet()) {
 			actorToRender.getValue().render(batch);
 		}
 	}

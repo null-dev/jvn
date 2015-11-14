@@ -1,6 +1,10 @@
 package xyz.nulldev.jvn.graphics;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import xyz.nulldev.jvn.JVN;
+
+import java.util.Iterator;
+import java.util.Map;
 
 //Basic actor class, can specify position, rotation, scale and opacity
 public abstract class JVNActor {
@@ -16,15 +20,13 @@ public abstract class JVNActor {
 	float opacity = 1f;
 	//Z index
 	int zindex = 0;
-	
-	//Set a keyframer
-	public JVNActor setKeyframer(Keyframer keyframer) {
-		this.keyframer = keyframer;
-		this.keyframer.setActor(this);
-		return this;
-	}
+    //Visible
+    boolean visible = false;
 	
 	public Keyframer getKeyframer() {
+        if(keyframer == null) {
+            this.keyframer = new Keyframer(this);
+        }
 		return this.keyframer;
 	}
 	
@@ -84,4 +86,24 @@ public abstract class JVNActor {
 		this.zindex = zindex;
 		return this;
 	}
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        if(visible) {
+            if(!JVN.ACTOR_LIST.containsValue(this))
+                JVN.ACTOR_LIST.put(getZIndex(), this);
+        } else {
+            Iterator<Map.Entry<Integer, JVNActor>> actorIterator = JVN.ACTOR_LIST.entrySet().iterator();
+            while(actorIterator.hasNext()) {
+                if(actorIterator.next().getValue().equals(this)) {
+                    actorIterator.remove();
+                    break;
+                }
+            }
+        }
+    }
 }

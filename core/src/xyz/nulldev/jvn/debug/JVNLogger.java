@@ -13,27 +13,27 @@ public class JVNLogger extends Logger {
 	public JVNLogger(String task) {
 		super("JVN", null);
 		this.taskName = task;
-		sysout("[JVNEngine][JVNLogger][INFO]", "Created new logger: " + taskName);
-		programOutput.add("INFO[JVNEngine][JVNLogger][INFO] Created new logger: " + taskName);
+		sysout("[JVNLogger][INFO]", "Created new logger: " + taskName);
+		programOutput.add("INFO[JVNLogger][INFO] Created new logger: " + taskName);
 	}
 	
 	@Override
 	public void info(String message) {
-		super.info("[JVNEngine][" + taskName+"][INFO] " + message);
-		sysout("[JVNEngine][" + taskName+"][INFO]", message);
-		programOutput.add("INFO[JVNEngine][" + taskName+"][INFO] " + message);
+		super.info("[" + taskName+"][INFO] " + message);
+		sysout("[" + taskName+"][INFO]", message);
+		programOutput.add("INFO[" + taskName+"][INFO] " + message);
 	}
 	@Override
 	public void warning(String message) {
-		super.info("[JVNEngine][" + taskName+"][WARN] " + message);
-		sysout("[JVNEngine][" + taskName+"][WARN]", message);
-		programOutput.add("WARN[JVNEngine][" + taskName+"][WARN] " + message);
+		super.info("[" + taskName+"][WARN] " + message);
+		sysout("[" + taskName+"][WARN]", message);
+		programOutput.add("WARN[" + taskName+"][WARN] " + message);
 	}
 	@Override
 	public void severe(String message) {
-		super.info("[JVNEngine][" + taskName+"][SEVR] " + message);
-		sysout("[JVNEngine][" + taskName+"][SEVR]", message);
-		programOutput.add("SEVR[JVNEngine][" + taskName+"][SEVR] " + message);
+		super.info("[" + taskName+"][SEVR] " + message);
+		sysout("[" + taskName+"][SEVR]", message);
+		programOutput.add("SEVR[" + taskName+"][SEVR] " + message);
 	}
 	
 	//System.out.println, in a function in case I need to change it later

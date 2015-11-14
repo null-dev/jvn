@@ -13,11 +13,11 @@ debugConsoleIssueCommand: Debug console issued command: %s!
 debugConsoleUnknownCommand: Unknown command!
 getTpsResult: TPS is: 
 garbageCollectInfo: Starting garbage collection...
-traceInstructionsInfo: Instruction tracing turned %b!
-traceMethodCallsInfo: Method call tracing turned %b!
+traceInstructionsInfo: Instruction tracing set to %b!
+traceMethodCallsInfo: Method call tracing set to %b!
 
 //StateLogger localizations...
 stateLoggerPaused: JVN paused!
 stateLoggerResumed: JVN resumed!
 stateLoggerResized: JVN window resized to: %s, %s!
-stateLoggerFullscreen: Fullscreen turned to: %b!
+stateLoggerFullscreen: Fullscreen set to: %b!

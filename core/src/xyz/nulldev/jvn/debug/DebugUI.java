@@ -5,18 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import xyz.nulldev.jvn.JVN;
 import xyz.nulldev.jvn.JVNConfig;
-import xyz.nulldev.jvn.TickManager;
-import xyz.nulldev.jvn.graphics.DrawableActor;
-import xyz.nulldev.jvn.graphics.Graphics;
-import xyz.nulldev.jvn.graphics.JVNCoordinate;
-import xyz.nulldev.jvn.graphics.Keyframer;
+import xyz.nulldev.jvn.debug.cmd.*;
 import xyz.nulldev.jvn.locale.JVNLocale;
 
 import java.util.ArrayList;
@@ -27,22 +22,30 @@ import java.util.ArrayList;
 
 public class DebugUI {
     private static JVNLogger logger = new JVNLogger("DebugUI");
-    static boolean debugConsoleKeysPressed = false;
-    static boolean debugConsoleActive = false;
-    static SpriteBatch batch = new SpriteBatch();
-    static ShapeRenderer sr = new ShapeRenderer();
-    static BitmapFont debugConsoleFont = new BitmapFont();
-    static ArrayList<Character> typedCharacters = new ArrayList<>();
+    boolean debugConsoleKeysPressed = false;
+    boolean debugConsoleActive = false;
+    SpriteBatch batch = new SpriteBatch();
+    ShapeRenderer sr = new ShapeRenderer();
+    BitmapFont debugConsoleFont = new BitmapFont();
+    ArrayList<Character> typedCharacters = new ArrayList<>();
 
-    static ArrayList<String> previousCommands = new ArrayList<>();
-    static int commandIndex = -2;
-    static ArrayList<Character> currentCommand = new ArrayList<>();
+    ArrayList<String> previousCommands = new ArrayList<>();
+    int commandIndex = -2;
+    ArrayList<Character> currentCommand = new ArrayList<>();
 
-    static boolean instructionTracingActive = false;
-    static boolean methodCallTracingActive = false;
+    ArrayList<ConsoleCommand> hookedCommands = new ArrayList<>();
+
+    public DebugUI() {
+        //Add default commands
+        addCommand(new ExitCommand("exit", "quit"));
+        addCommand(new FullscreenCommand("fullscreen"));
+        addCommand(new GcCommand("gc"));
+        addCommand(new GetTpsCommand("gettps", "tps"));
+        addCommand(new TestActorCommand("testactor"));
+    }
 
     //The debug loop that should be called every render...
-    public static void debugLoop(OrthographicCamera camera) {
+    public void debugLoop(OrthographicCamera camera) {
         //EVERYTHING should be inside this if statement
         if(JVNConfig.readBoolean("debug")) {
             checkKeyBinds();
@@ -63,7 +66,6 @@ public class DebugUI {
                     if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                         if(commandIndex == -2) {
                             commandIndex = previousCommands.size();
-                            //Stupid warning, I don't think typedCharacters.clone() can return anything else...
                             currentCommand = (ArrayList<Character>) typedCharacters.clone();
                         }
                         commandIndex--;
@@ -81,7 +83,6 @@ public class DebugUI {
                             commandIndex++;
                             if(commandIndex == previousCommands.size()) {
                                 commandIndex = -2;
-                                //Stupid warning, I don't think currentCommand.clone() can return anything else...
                                 typedCharacters = (ArrayList<Character>) currentCommand.clone();
                             } else {
                                 typedCharacters.clear();
@@ -110,43 +111,38 @@ public class DebugUI {
     }
 
     //Execute debug commands
-    public static void executeDebugCommand(String command) {
+    public void executeDebugCommand(String command) {
         //Add this command to previous commands
         previousCommands.add(command);
+        //Split command
         String[] splitCommands = command.split(" ");
-        //Get the TPS (FPS)
-        switch(splitCommands[0].toUpperCase()) {
-            case "GETTPS":
-                logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
-                break;
-            case "TESTACTOR":
-                DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
-                tempActor.setScale(0.5f);
-                Keyframer tempKeyframer = new Keyframer();
-                tempActor.setKeyframer(tempKeyframer);
-                //You must add the keyframer to an actor first, then keyframe coords and stuff
-                tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.position.x,0), 2000);
-                tempKeyframer.keyframeOpacity(0f, 2000);
-                tempKeyframer.keyframeRotation(90, 2000);
-                tempKeyframer.keyframeScale(2f, 2000);
-                JVN.actorList.put(tempActor.getZIndex(), tempActor);
-                break;
-            case "GC":
-                logger.info(JVNLocale.s("garbageCollectInfo"));
-                System.gc();
-                //Trace instruction calls
-                break;
-            case "FULLSCREEN":
-                Graphics.fullscreen(!Graphics.fullscreen);
-                break;
-            default:
-                logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
-                break;
+        //Loop through hooked commands
+        for(ConsoleCommand command1 : hookedCommands) {
+            if(command1.doesMatch(splitCommands[0])) {
+                String[] args = new String[splitCommands.length-1];
+                System.arraycopy(splitCommands, 1, args, 0, args.length);
+                command1.invoke(args);
+                return;
+            }
         }
+        logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
+    }
+
+    public void addCommand(ConsoleCommand consoleCommand) {
+        if(!hookedCommands.contains(consoleCommand))
+            hookedCommands.add(consoleCommand);
+    }
+
+    public void removeCommand(ConsoleCommand consoleCommand) {
+        hookedCommands.remove(consoleCommand);
+    }
+
+    public ArrayList<ConsoleCommand> getCommands() {
+        return this.hookedCommands;
     }
 
     //Check the keybinds
-    public static void checkKeyBinds() {
+    public void checkKeyBinds() {
         //Debug console
         //Can be activated by tapping the "MENU" button on Android or holding "CTRL+GRAVE" on PC
         if((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyPressed(Input.Keys.GRAVE) && !debugConsoleKeysPressed)
@@ -174,7 +170,7 @@ public class DebugUI {
     }
 
     //Render debug console
-    public static void renderDebugConsole(OrthographicCamera camera) {
+    public void renderDebugConsole(OrthographicCamera camera) {
         //Render input box background
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -183,7 +179,7 @@ public class DebugUI {
         sr.setColor(0.9f, 0.9f, 0.9f, 0.7f);
         sr.rect(0,
                 0,
-                JVN.camera.position.x*2, 20);
+                JVN.CAMERA.position.x*2, 20);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
@@ -225,18 +221,8 @@ public class DebugUI {
         batch.end();
     }
 
-    //Print device info
-    //Will be removed later probably
-    //TODO REMOVE
-    public static void printDeviceInfo() {
-        logger.info("Printing device info...");
-        //Screen height and width
-        logger.info("Screen height: " + Gdx.graphics.getHeight());
-        logger.info("Screen width: " + Gdx.graphics.getWidth());
-    }
-
     //Dispose
-    public static void dispose() {
+    public void dispose() {
         batch.dispose();
         sr.dispose();
         debugConsoleFont.dispose();
@@ -326,5 +312,9 @@ public class DebugUI {
     public static boolean isShift() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                 || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+    }
+
+    public static JVNLogger getLogger() {
+        return logger;
     }
 }

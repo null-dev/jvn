@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class DrawableActor extends JVNActor {
+public class SimpleTextureActor extends JVNActor {
 	
 	Texture tex = null;
 	int xorigin = 0;
@@ -28,10 +28,10 @@ public class DrawableActor extends JVNActor {
 	}
 
 	//Blank constructor
-	public DrawableActor() {}
+	public SimpleTextureActor() {}
 	
 	//Construct with texture
-	public DrawableActor(Texture tex) {
+	public SimpleTextureActor(Texture tex) {
 		this.tex = tex;
 	}
 	
@@ -58,7 +58,7 @@ public class DrawableActor extends JVNActor {
 		return tex;
 	}
 
-	public DrawableActor setTexture(Texture tex) {
+	public SimpleTextureActor setTexture(Texture tex) {
 		this.tex = tex;
 		return this;
 	}

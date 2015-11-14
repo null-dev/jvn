@@ -29,19 +29,18 @@ import java.util.TreeMap;
 public class JVN extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
-    public static OrthographicCamera camera;
+    public static OrthographicCamera CAMERA;
     HashMap<String, Object> launcherParams;
-    public static JVNLogger stateLogger;
+    public static JVNLogger STATE_LOGGER;
     JVNLogger coreLogger;
+    DebugUI DEBUG_UI;
 
     //We want our new map to be sorted!
-    public static TreeMap<Integer, JVNActor> actorList= new TreeMap<>();
+    public static TreeMap<Integer, JVNActor> ACTOR_LIST = new TreeMap<>();
     public static File ASSET_ROOT = new File(".");
 
     //DEMO STUFF
     DemoSplash ds = new DemoSplash();
-
-    //VARIABLES
 
     //JVNNative nativeCode;
     //TODO IMPLEMENT NATIVE CODE
@@ -69,31 +68,29 @@ public class JVN extends ApplicationAdapter {
             }
         }
         //Create state logger
-        stateLogger = new JVNLogger("StateLogger");
+        STATE_LOGGER = new JVNLogger("StateLogger");
         //Create core logger
         coreLogger = new JVNLogger("Core");
         try{
-            //Print device info...
-            DebugUI.printDeviceInfo();
-            //Create camera
-            camera = new OrthographicCamera(Gdx.graphics.getWidth()
+            //Create CAMERA
+            CAMERA = new OrthographicCamera(Gdx.graphics.getWidth()
                     , Gdx.graphics.getHeight());
-            camera.position.set(1280/2, 720/2, 0);
-            camera.update();
+            CAMERA.position.set(1280/2, 720/2, 0);
+            CAMERA.update();
             batch = new SpriteBatch();
             img = new Texture(new File(ASSET_ROOT, "badlogic.jpg").getAbsolutePath());
 
             //Add test drawable actor
-			/*DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
+			/*SimpleTextureActor tempActor = new SimpleTextureActor(new Texture(Gdx.files.internal("img/icon_white.png")));
 			tempActor.setScale(0.5f);
 			Keyframer tempKeyframer = new Keyframer();
 			tempActor.setKeyframer(tempKeyframer);
 			//You must add the keyframer to an actor first, then keyframe coords and stuff
-			tempKeyframer.keyframeCoordinate(new JVNCoordinate(camera.viewportWidth,0), 2000);
+			tempKeyframer.keyframeCoordinate(new JVNCoordinate(CAMERA.viewportWidth,0), 2000);
 			tempKeyframer.keyframeOpacity(0f, 2000);
 			tempKeyframer.keyframeRotation(90, 2000);
 			tempKeyframer.keyframeScale(2f, 2000);
-			actorList.put(tempActor.getZIndex(), tempActor);*/
+			ACTOR_LIST.put(tempActor.getZIndex(), tempActor);*/
             Graphics.fullscreen(false);
         } catch(Exception e) {
             e.printStackTrace();
@@ -105,6 +102,7 @@ public class JVN extends ApplicationAdapter {
                 System.exit(-1);
             }
         }
+        DEBUG_UI = new DebugUI();
     }
 
     @Override
@@ -134,33 +132,41 @@ public class JVN extends ApplicationAdapter {
         } finally {
             //Debug stuff
             //ALWAYS PUT THIS LAST! (So it can be ontop of everything)
-            DebugUI.debugLoop(camera);
+            DEBUG_UI.debugLoop(CAMERA);
         }
     }
 
     @Override
     public void dispose() {
-        DebugUI.dispose();
+        DEBUG_UI.dispose();
         batch.dispose();
     }
 
     @Override
     public void resize(int width, int height) {
-        //Resize the camera
-        camera.viewportHeight = height;
-        camera.viewportWidth = width;
-        camera.update();
+        //Resize the CAMERA
+        CAMERA.viewportHeight = height;
+        CAMERA.viewportWidth = width;
+        CAMERA.update();
 
-        stateLogger.info(String.format(JVNLocale.s("stateLoggerResized"), height, width));
+        STATE_LOGGER.info(String.format(JVNLocale.s("stateLoggerResized"), height, width));
     }
 
     @Override
     public void pause() {
-        stateLogger.info(JVNLocale.s("stateLoggerPaused"));
+        STATE_LOGGER.info(JVNLocale.s("stateLoggerPaused"));
     }
 
     @Override
     public void resume() {
-        stateLogger.info(JVNLocale.s("stateLoggerResumed"));
+        STATE_LOGGER.info(JVNLocale.s("stateLoggerResumed"));
+    }
+
+    public DebugUI getDebugUi() {
+        return DEBUG_UI;
+    }
+
+    public void setDebugUi(DebugUI DEBUG_UI) {
+        this.DEBUG_UI = DEBUG_UI;
     }
 }

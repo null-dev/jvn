@@ -14,7 +14,7 @@ public class Graphics {
 		Gdx.graphics.setDisplayMode(Integer.parseInt(JVNConfig.readString("defaultRes").split("x")[0]),
 				Integer.parseInt(JVNConfig.readString("defaultRes").split("x")[1]),
 				fullscreen);
-		JVN.stateLogger.info(String.format(JVNLocale.s("stateLoggerFullscreen"),
+		JVN.STATE_LOGGER.info(String.format(JVNLocale.s("stateLoggerFullscreen"),
 				fullscreen));
 	}
 }
