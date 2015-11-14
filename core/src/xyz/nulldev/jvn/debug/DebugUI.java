@@ -117,42 +117,31 @@ public class DebugUI {
         //Get the TPS (FPS)
         switch(splitCommands[0].toUpperCase()) {
             case "GETTPS":
-
-        }
-        if(splitCommands[0].equalsIgnoreCase("GETTPS")) {
-            logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
-            //Spawn an actor just for testing
-        } else if(splitCommands[0].equalsIgnoreCase("TESTACTOR")) {
-            DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
-            tempActor.setScale(0.5f);
-            Keyframer tempKeyframer = new Keyframer();
-            tempActor.setKeyframer(tempKeyframer);
-            //You must add the keyframer to an actor first, then keyframe coords and stuff
-            tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.position.x,0), 2000);
-            tempKeyframer.keyframeOpacity(0f, 2000);
-            tempKeyframer.keyframeRotation(90, 2000);
-            tempKeyframer.keyframeScale(2f, 2000);
-            JVN.actorList.put(tempActor.getZIndex(), tempActor);
-        } else if(splitCommands[0].equalsIgnoreCase("GC")) {
-            logger.info(JVNLocale.s("garbageCollectInfo"));
-            System.gc();
-            //Trace instruction calls
-        } else if(splitCommands[0].equalsIgnoreCase("TRACEINSTRUCTIONS")) {
-            instructionTracingActive = !instructionTracingActive;
-            Runtime.getRuntime().traceInstructions(instructionTracingActive);
-            logger.info(String.format(JVNLocale.s("traceInstructionsInfo"),
-                    instructionTracingActive));
-            //Trace method calls
-        } else if(splitCommands[0].equalsIgnoreCase("TRACEMETHODCALLS")) {
-            methodCallTracingActive = !methodCallTracingActive;
-            Runtime.getRuntime().traceMethodCalls(methodCallTracingActive);
-            logger.info(String.format(JVNLocale.s("traceMethodCallsInfo"),
-                    methodCallTracingActive));
-        } else if(splitCommands[0].equalsIgnoreCase("FULLSCREEN")) {
-            Graphics.fullscreen(!Graphics.fullscreen);
-        } else {
-            //Wut command is that?
-            logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
+                logger.info(JVNLocale.s("getTpsResult") + TickManager.tps);
+                break;
+            case "TESTACTOR":
+                DrawableActor tempActor = new DrawableActor(new Texture(Gdx.files.internal("img/icon_white.png")));
+                tempActor.setScale(0.5f);
+                Keyframer tempKeyframer = new Keyframer();
+                tempActor.setKeyframer(tempKeyframer);
+                //You must add the keyframer to an actor first, then keyframe coords and stuff
+                tempKeyframer.keyframeCoordinate(new JVNCoordinate(JVN.camera.position.x,0), 2000);
+                tempKeyframer.keyframeOpacity(0f, 2000);
+                tempKeyframer.keyframeRotation(90, 2000);
+                tempKeyframer.keyframeScale(2f, 2000);
+                JVN.actorList.put(tempActor.getZIndex(), tempActor);
+                break;
+            case "GC":
+                logger.info(JVNLocale.s("garbageCollectInfo"));
+                System.gc();
+                //Trace instruction calls
+                break;
+            case "FULLSCREEN":
+                Graphics.fullscreen(!Graphics.fullscreen);
+                break;
+            default:
+                logger.warning(JVNLocale.s("debugConsoleUnknownCommand"));
+                break;
         }
     }
 
